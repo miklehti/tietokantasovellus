@@ -1,0 +1,68 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package werkko.jpachat;
+
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ *
+ * @author lehtimik
+ */
+@Repository
+@Transactional
+public class JPAMessageRepository implements MessageRepository<JPAMessage> {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public JPAMessage create(JPAMessage object) {
+        return entityManager.merge(object);
+    }
+
+    public JPAMessage read(String id) {
+        return entityManager.find(JPAMessage.class, id);
+    }
+
+    public JPAMessage update(JPAMessage object) {
+        return entityManager.merge(object);
+    }
+
+    public void delete(String id) {
+        JPAMessage message = read(id);
+        if (message != null) {
+            entityManager.remove(message);
+        }
+    }
+
+    public List<JPAMessage> list() {
+        String queryString = "SELECT * FROM Aircraft Message";
+        Query query = entityManager.createQuery(queryString);
+        List<JPAMessage> messages = query.getResultList();
+        return messages;
+    }
+}
+
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package werkko.jpachat;
+import java.util.Date;
+/**
+ *
+ * @author lehtimik
+ */
+public interface Message(){
+	
+   
+}
+
+
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
