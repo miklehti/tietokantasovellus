@@ -14,10 +14,16 @@
     </head>
    <body>
         <h1>Login</h1>
-        <form method="POST" action="http://localhost:8080/authentication/app/login">
+        <form method="POST" action="http://localhost:8080/drinkkiarkisto/app/login">
   <label>Käyttäjätunnus: <input type="text" name="username" id="username" /></label>
   <label>Salasana: <input type="password" name="password" id ="password"/></label>
-  <input type="submit" />
+  <input type="submit" name ="Kirjaudu Sisään" />
 </form>
+        
+        
+        
+        <c:url var="rekisteroidy" value="http://localhost:8080/drinkkiarkisto/app/rekisteroidy">   
+        </c:url>
+        <a href="<c:out value="${rekisteroidy}"/>">rekisteröidy</a>
     </body>
 </html>

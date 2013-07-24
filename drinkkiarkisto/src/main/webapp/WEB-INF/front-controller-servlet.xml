@@ -13,7 +13,7 @@
                             http://www.springframework.org/schema/jdbc
                             http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd">
 
-    <context:component-scan base-package="werkko.drinkkiarkisto" />
+    <context:component-scan base-package="werkko.controller" />
      <!-- Ladataan käyttöön springin view-resolver: luokka, jota käytetään
     näkymätiedostojen päättelyyn -->    
     <!-- Nyt Controller-luokkien metodeissa palautettu merkkijono määrittää
