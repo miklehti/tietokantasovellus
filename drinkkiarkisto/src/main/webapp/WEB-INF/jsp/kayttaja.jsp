@@ -10,26 +10,23 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-        <title>JSP Page</title>
+        <title>Käyttäjän tiedot</title>
     </head>
     <body>
-        <h1>Drinkin resepti</h1>
+        <h1>Käyttäjän tiedot</h1>
          <c:url var="logout" value="http://localhost:8080/drinkkiarkisto/app/logout">   
         </c:url>
         <a href="<c:out value="${logout}"/>">logout</a>
          <p>${sana}</P>
         <pre>
-            <c:forEach var="alkio" items="${ainesosa}">
+            <c:forEach var="alkio" items="${kayttajat}">
        ${alkio}     
             </c:forEach>
         </pre>
         
-          <c:url var="takaisin" value="http://localhost:8080/drinkkiarkisto/app/haku">   
+          <c:url var="takaisin" value="http://localhost:8080/drinkkiarkisto/app/admin">   
         </c:url>
-        <a href="<c:out value="${takaisin}"/>"><-takaisin hakusivulle</a>
-        
-        <c:url var="takaisin" value="http://localhost:8080/drinkkiarkisto/app/admin">   
-        </c:url>
-        <a href="<c:out value="${takaisin}"/>"><-takaisin adminsivulle</a>
+        <a href="<c:out value="${takaisin}"/>"><-takaisin</a>
     </body>
 </html>
+

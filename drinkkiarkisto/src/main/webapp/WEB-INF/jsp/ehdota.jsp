@@ -26,7 +26,7 @@
             <label>m‰‰r‰: <input type="text" name="maara4" id ="maara4"/></label>
              <label>Ainesosa 5:<input type="text" name="ainesosa5" id ="ainesosa5"/></label>
             <label>m‰‰r‰: <input type="text" name="maara5" id ="maara5"/></label>
-            <input type="submit" name ="Rekisterˆidy" />
+            <input type="submit" value ="Ehdota drinkki‰" />
         </form>
     </body>
 </html>

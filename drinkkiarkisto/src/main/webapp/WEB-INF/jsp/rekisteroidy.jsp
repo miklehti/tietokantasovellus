@@ -18,7 +18,7 @@
   <label>Anna salasanasi(6-15 merkkiä): <input type="password" name="password" id ="password"/></label>
     <label>Anna salasanasi uudestaan: <input type="password2" name="password2" id ="password2"/></label>
     <label>Anna sähköpostisi: <input type="email" name="email" id ="email"/></label>
-  <input type="submit" name ="Rekisteröidy" />
+  <input type="submit" value ="Rekisteröidy" />
 </form>
     </body>
 </html>

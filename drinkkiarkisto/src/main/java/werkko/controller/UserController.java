@@ -130,7 +130,53 @@ public class UserController {
    }
  
      }
-   
+       @RequestMapping(value = "hae-aakkoset", method = RequestMethod.POST)
+    public String haeAakkosissaAdmin(
+            @RequestParam(value = "hae-aakkoset", required = false) String hae,
+            HttpSession session) {
+
+        session.getAttribute("password");
+        if (!"secret".equals(session.getAttribute("password"))) {
+            return "redirect:login";
+        } else {
+            String sana = "Aakkosissa drinkkejä:";
+            HashMap<String, String> osoitteita = new HashMap<String, String>();
+
+
+            osoitteita.put("haku_aakkonen1", "http://localhost:8080/drinkkiarkisto/app/GinTonic/drinkki");
+            osoitteita.put("haku_aakkonen2", "http://localhost:8080/drinkkiarkisto/app/MustaRyssa/drinkki");
+
+
+            session.setAttribute("sana", sana);
+
+            session.setAttribute("osoitteita", osoitteita);
+            return "redirect:haku";
+        }
+    }
+       
+        @RequestMapping(value = "hae-tyyppi", method = RequestMethod.POST)
+    public String haeTyyppiAdmin(
+            @RequestParam(value = "hae-tyyppi", required = false) String hae,
+            HttpSession session) {
+
+        session.getAttribute("password");
+        if (!"secret".equals(session.getAttribute("password"))) {
+            return "redirect:login";
+        } else {
+            String sana = "Tyypin mukaan tulleita tuloksia:";
+            HashMap<String, String> osoitteita = new HashMap<String, String>();
+
+
+            osoitteita.put("haku_alkucocktail12", "http://localhost:8080/drinkkiarkisto/app/GinTonic/drinkki");
+            osoitteita.put("haku    _alkucocktail13", "http://localhost:8080/drinkkiarkisto/app/MustaRyssa/drinkki");
+
+
+            session.setAttribute("sana", sana);
+
+            session.setAttribute("osoitteita", osoitteita);
+            return "redirect:haku";
+        }
+    }
     }
 
 
