@@ -16,6 +16,9 @@
     </head>
     <body>
         <h1>Drinkkiarkisto</h1>
+        
+         <p>Hei ${username_sessio}</P>
+          <p>Hei ${usernameKanta}</P>
         <c:url var="thisURL" value="http://localhost:8080/drinkkiarkisto/app/logout">   
         </c:url>
         
@@ -30,9 +33,11 @@
             <input type="submit" value ="Hae"/>
         </form>
 
-         <c:url var="admin" value="http://localhost:8080/drinkkiarkisto/app/admin">   
-        </c:url>
-        <a href="<c:out value="${admin}"/>">Ylläpito</a>
+         <pre>
+            <c:forEach var="alkio" items="${yllapitolinkki}">
+    <a href="${alkio.value}">${alkio.key}</a>
+            </c:forEach>
+        </pre>
 
 
         <p>${sana}</P>

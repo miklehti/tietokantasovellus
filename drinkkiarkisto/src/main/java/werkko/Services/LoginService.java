@@ -5,6 +5,7 @@
 package werkko.Services;
 
 import java.util.List;
+import werkko.data.UserLogin;
 
 /**
  *
@@ -16,4 +17,7 @@ public interface LoginService<T> {
     T update(T object);
     void delete(String id);
       List<String> list();
+       String loginOK(String username, String password);
+       UserLogin getUserlogin() ;
+       void setUserlogin(UserLogin userlogin);
 }

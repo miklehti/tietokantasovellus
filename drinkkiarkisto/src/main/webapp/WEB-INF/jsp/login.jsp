@@ -22,7 +22,7 @@
   
  
 </form>                
-        
+         <p>${nameError}</P>
         <c:url var="rekisteroidy" value="http://localhost:8080/drinkkiarkisto/app/rekisteroidy">   
         </c:url>
         <a href="<c:out value="${rekisteroidy}"/>">rekisteröidy</a>

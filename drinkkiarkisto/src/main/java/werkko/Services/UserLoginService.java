@@ -21,6 +21,17 @@ public class UserLoginService implements LoginService<UserLogin> {
 
     @Autowired
     private LoginRepository<UserLogin> loginrepository;
+    private UserLogin userlogin;
+
+    public UserLogin getUserlogin() {
+        return userlogin;
+    }
+    
+
+    public void setUserlogin(UserLogin userlogin) {
+        this.userlogin = userlogin;
+    }
+    
 
     @Transactional(readOnly = false)
     public UserLogin create(UserLogin object) {
@@ -53,4 +64,19 @@ public class UserLoginService implements LoginService<UserLogin> {
 
 
     }
+     @Transactional(readOnly = true)
+    public String loginOK(String username, String password){
+         List<UserLogin> users = loginrepository.list();
+         for (int i = 0; i < users.size(); i++) {
+           if(users.get(i).getName().equals(username)){
+               if(users.get(i).getPassword().equals(password)){
+                   this.setUserlogin(users.get(i));
+                   return "ok";
+               }
+               return "Väärä salasana";
+           }
+        }
+         return "käyttäjää ei löytynyt";
+     }
+    
 }
