@@ -13,4 +13,8 @@ public interface Login {
     String name = null;
     String authority = null;
     String password = null;
+   String status = null;
+   String email = null;
+   
+    
 }

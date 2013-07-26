@@ -26,16 +26,22 @@ public class UserLoginService implements LoginService<UserLogin> {
     public UserLogin getUserlogin() {
         return userlogin;
     }
-    
 
     public void setUserlogin(UserLogin userlogin) {
         this.userlogin = userlogin;
     }
-    
 
     @Transactional(readOnly = false)
     public UserLogin create(UserLogin object) {
-        return loginrepository.create(object);
+        if (onkoKayttajaaOlemassa(object.getName())) {
+            UserLogin userlogin = new UserLogin();
+            userlogin.setStatus("Käyttäjä on jo olemassa");
+            return userlogin;
+        }
+        UserLogin luotavaTunnus = new UserLogin();
+        luotavaTunnus = loginrepository.create(object);
+        luotavaTunnus.setStatus("ok");
+        return luotavaTunnus;
     }
 
     @Transactional(readOnly = true)
@@ -64,19 +70,51 @@ public class UserLoginService implements LoginService<UserLogin> {
 
 
     }
-     @Transactional(readOnly = true)
-    public String loginOK(String username, String password){
-         List<UserLogin> users = loginrepository.list();
-         for (int i = 0; i < users.size(); i++) {
-           if(users.get(i).getName().equals(username)){
-               if(users.get(i).getPassword().equals(password)){
-                   this.setUserlogin(users.get(i));
-                   return "ok";
-               }
-               return "Väärä salasana";
-           }
+
+    @Transactional(readOnly = true)
+    public String loginOK(String username, String password) {
+
+        if (onkoKayttajaaOlemassa(username)) {
+            if (onkoSalasanaOikea(username, password)) {
+                this.setUserlogin(annaUserLogin(username));
+                return "ok";
+            }
+            return "Väärä salasana";
         }
-         return "käyttäjää ei löytynyt";
-     }
-    
+        return "käyttäjää ei löytynyt";
+    }
+
+    public boolean onkoKayttajaaOlemassa(String username) {
+        List<UserLogin> users = loginrepository.list();
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getName().equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean onkoSalasanaOikea(String username, String password) {
+        List<UserLogin> users = loginrepository.list();
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getName().equals(username)) {
+                if (users.get(i).getPassword().equals(password)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public UserLogin annaUserLogin(String username) {
+        List<UserLogin> users = loginrepository.list();
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getName().equals(username)) {
+                return users.get(i);
+            }
+        }
+        UserLogin userlogin = new UserLogin();
+        userlogin.setStatus("Käyttäjää ei löydy");
+        return userlogin;
+    }
 }

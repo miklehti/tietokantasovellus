@@ -16,9 +16,10 @@
                 <form method="POST" action="http://localhost:8080/drinkkiarkisto/app/add-user">
   <label>Anna haluamasi käyttäjätunnus(6-15 merkkiä): <input type="text" name="username" id="username" /></label>
   <label>Anna salasanasi(6-15 merkkiä): <input type="password" name="password" id ="password"/></label>
-    <label>Anna salasanasi uudestaan: <input type="password2" name="password2" id ="password2"/></label>
+    <label>Anna salasanasi uudestaan: <input type="password" name="password2" id ="password2"/></label>
     <label>Anna sähköpostisi: <input type="email" name="email" id ="email"/></label>
   <input type="submit" value ="Rekisteröidy" />
 </form>
+        <p>${nameError}</P>
     </body>
 </html>

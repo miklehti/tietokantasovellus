@@ -17,8 +17,13 @@
     <body>
         <h1>Drinkkiarkisto</h1>
         
-         <p>Hei ${username_sessio}</P>
-          <p>Hei ${usernameKanta}</P>
+         <p>Username sessio: ${username_sessio}</P>
+          <p>Username kanta: ${usernameKanta}</P>
+          <p> Authority kanta:${authorityKanta}</P>
+          <p>id_kanta:  ${idKanta}</P>
+          <p>status olio: ${statusKanta}</P>
+          <p>salasana kanta: ${passwordKanta}</P>
+          <p>email kanta: ${emailKanta}</P>
         <c:url var="thisURL" value="http://localhost:8080/drinkkiarkisto/app/logout">   
         </c:url>
         

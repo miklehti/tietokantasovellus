@@ -29,6 +29,29 @@ public class UserLogin implements Login, Serializable {
     private String password;
     @Column(name = "authority")
     private String authority;
+    
+       @Column(name = "email")
+    private String email;
+    
+    private String status;
+
+    public  String getEmail() {
+        return email;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    
 
        public UserLogin() {
         this.id = UUID.randomUUID().toString();

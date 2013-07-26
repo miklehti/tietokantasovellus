@@ -36,23 +36,25 @@ public class DrinkkiController {
         userlogin.setAuthority("admin");
         userlogin.setName("mikko");
         userlogin.setPassword("secret");
+        userlogin.setEmail("mikko@mikko");
         loginservice.create(userlogin);
-        
-         UserLogin userlogin2 = new UserLogin();
+
+        UserLogin userlogin2 = new UserLogin();
         userlogin2.setAuthority("user");
         userlogin2.setName("pekka");
         userlogin2.setPassword("secret");
+        userlogin.setEmail("pekka@pekka");
         loginservice.create(userlogin2);
     }
-    
-    public boolean onkoIstuntoVoimassa(HttpSession session){
+
+    public boolean onkoIstuntoVoimassa(HttpSession session) {
         String passwordKannassa = loginservice.getUserlogin().getPassword();
-        String passwordSessiossa = (String)session.getAttribute("password");
+        String passwordSessiossa = (String) session.getAttribute("password");
         String usernameKannassa = loginservice.getUserlogin().getName();
-        String usernameSessiossa = (String)session.getAttribute("username");
-        if(passwordKannassa.equals(passwordSessiossa)&&usernameKannassa.equals(usernameSessiossa)){
+        String usernameSessiossa = (String) session.getAttribute("username");
+        if (passwordKannassa.equals(passwordSessiossa) && usernameKannassa.equals(usernameSessiossa)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -90,102 +92,126 @@ public class DrinkkiController {
         return "login";
 
     }
-    
-     @RequestMapping("haku")
+
+    @RequestMapping("haku")
     public String viewHakuPage(Model model, HttpSession session) {
-        
-    
-        if (onkoIstuntoVoimassa(session)==false) {
-           return "login";               
-        }else{
-            if(loginservice.getUserlogin().getAuthority().equals("admin")){
-                HashMap<String,String> yllapitolinkki = new HashMap<String,String>();
+
+
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "login";
+        } else {
+            if (loginservice.getUserlogin().getAuthority().equals("admin")) {
+                HashMap<String, String> yllapitolinkki = new HashMap<String, String>();
                 yllapitolinkki.put("Ylläpito", "http://localhost:8080/drinkkiarkisto/app/admin");
                 model.addAttribute("yllapitolinkki", yllapitolinkki);
-                
+
             }
             String username = (String) session.getAttribute("username");
-                String usernameKanta = loginservice.getUserlogin().getName();
-                model.addAttribute("username_sessio", username);
-                model.addAttribute("usernameKanta", usernameKanta);
+            String usernameKanta = loginservice.getUserlogin().getName();
+            String passwordKanta = loginservice.getUserlogin().getPassword();
+            String authorityKanta = loginservice.getUserlogin().getAuthority();
+            String idKanta = loginservice.getUserlogin().getId();
+            String statusKanta = loginservice.getUserlogin().getStatus();
+                 String emailKanta = loginservice.getUserlogin().getEmail();
+            model.addAttribute("username_sessio", username);
+            model.addAttribute("usernameKanta", usernameKanta);
+            model.addAttribute("authorityKanta", authorityKanta);
+            model.addAttribute("idKanta", idKanta);
+            model.addAttribute("statusKanta", statusKanta);
+            model.addAttribute("passwordKanta", passwordKanta);
+            model.addAttribute("emailKanta", emailKanta);
+
             return "haku";
         }
-   
+
     }
-     
-     @RequestMapping(value = "hae", method = RequestMethod.POST)
+
+    @RequestMapping(value = "hae", method = RequestMethod.POST)
     public String haeDrinkkeja(
             @RequestParam(value = "hae", required = false) String hae,
             HttpSession session) {
-   
-        if (onkoIstuntoVoimassa(session)==false) {
-           return "redirect:login";               
-        }else{
-            String sana = "Haun tulokset:";
-            HashMap<String,String> osoitteita = new HashMap<String,String>();
-            
-           
-               osoitteita.put("Gin Tonic", "http://localhost:8080/drinkkiarkisto/app/GinTonic/drinkki"); 
-               osoitteita.put("Musta Ryssä", "http://localhost:8080/drinkkiarkisto/app/MustaRyssa/drinkki");
-               
-               
-        session.setAttribute("sana", sana);
-    
-        session.setAttribute("osoitteita", osoitteita);
-        return "redirect:haku";
-        }
-     }
 
-        
-        @RequestMapping(method = RequestMethod.GET, value = "{drinkName}/drinkki")
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "redirect:login";
+        } else {
+            String sana = "Haun tulokset:";
+            HashMap<String, String> osoitteita = new HashMap<String, String>();
+
+
+            osoitteita.put("Gin Tonic", "http://localhost:8080/drinkkiarkisto/app/GinTonic/drinkki");
+            osoitteita.put("Musta Ryssä", "http://localhost:8080/drinkkiarkisto/app/MustaRyssa/drinkki");
+
+
+            session.setAttribute("sana", sana);
+
+            session.setAttribute("osoitteita", osoitteita);
+            return "redirect:haku";
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "{drinkName}/drinkki")
     public String read(Model model, @PathVariable String drinkName, HttpSession session) {
-             session.getAttribute("password");
-       if (onkoIstuntoVoimassa(session)==false) {
-           return "login";               
-        }else{
+        session.getAttribute("password");
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "login";
+        } else {
             String sana = "Ainesosat:";
             ArrayList<String> ainesosa = new ArrayList<String>();
             ainesosa.add("4 cl Gin");
             ainesosa.add("8 cl Tonic-vettä");
-        model.addAttribute("sana", sana);
-        model.addAttribute("ainesosa", ainesosa);
-        return "drinkki";   
+            model.addAttribute("sana", sana);
+            model.addAttribute("ainesosa", ainesosa);
+            return "drinkki";
+        }
     }
-    }
-        
-     @RequestMapping("rekisteroidy")
+
+    @RequestMapping("rekisteroidy")
     public String viewRekisteroidy() {
         return "rekisteroidy";
     }
-     
-          @RequestMapping("ehdota")
+
+    @RequestMapping("ehdota")
     public String viewEhdota(Model model, HttpSession session) {
-              if (onkoIstuntoVoimassa(session)==false) {
-           return "login";               
-        }else{
-        return "ehdota";
-              }
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "login";
+        } else {
+            return "ehdota";
+        }
     }
-     
-      @RequestMapping(value = "add-user", method = RequestMethod.POST)
+
+    @RequestMapping(value = "add-user", method = RequestMethod.POST)
     public String lisaaKayttajia(
             @RequestParam(value = "username", required = true) String username,
             @RequestParam(value = "password", required = true) String password,
             @RequestParam(value = "email", required = true) String email,
             @RequestParam(value = "password2", required = true) String password2,
             HttpSession session) {
-          if (onkoIstuntoVoimassa(session)==false) {
-           return "redirect:login";               
-        }else{
-   
-          String password3 = "secret";
-       session.setAttribute("username", username);
-        session.setAttribute("password", password3);
-        return "redirect:haku";
-          }
-     }
-      
-      @RequestMapping(value = "ehdota-drinkkia", method = RequestMethod.POST)
+
+        if (!password.equals(password2)) {
+            String nameError = "Antamasi salasanat eivät ole samoja";
+            session.setAttribute("nameError", nameError);
+            return "redirect:add-user";
+        }
+        UserLogin userlogin = new UserLogin();
+        userlogin.setAuthority("user");
+        userlogin.setName(username);
+        userlogin.setPassword(password);
+        userlogin.setEmail(email);
+        UserLogin uusiKayttaja = (UserLogin) loginservice.create(userlogin);
+        if (uusiKayttaja.getStatus().equals("ok")) {
+            session.setAttribute("username", username);
+            session.setAttribute("password", password);
+            loginservice.setUserlogin(uusiKayttaja);
+            return "redirect:haku";
+        } else {
+            session.setAttribute("nameError", uusiKayttaja.getStatus());
+            return "redirect:add-user";
+        }
+
+
+    }
+
+    @RequestMapping(value = "ehdota-drinkkia", method = RequestMethod.POST)
     public String ehdotaDrinkkia(
             @RequestParam(value = "name", required = true) String name,
             @RequestParam(value = "tyyppi", required = false) String tyyppi,
@@ -200,22 +226,23 @@ public class DrinkkiController {
             @RequestParam(value = "ainesosa5", required = false) String ainesosa5,
             @RequestParam(value = "maara5", required = false) String maara5,
             HttpSession session) {
-   if (onkoIstuntoVoimassa(session)==false) {
-           return "redirect:login";               
-        }else{
-       //tähän tallennus ja kiitos viesti
-        return "redirect:ehdota";
-   }
- 
-     }
-       @RequestMapping(value = "hae-aakkoset", method = RequestMethod.POST)
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "redirect:login";
+        } else {
+            //tähän tallennus ja kiitos viesti
+            return "redirect:ehdota";
+        }
+
+    }
+
+    @RequestMapping(value = "hae-aakkoset", method = RequestMethod.POST)
     public String haeAakkosissa(
             @RequestParam(value = "hae-aakkoset", required = false) String hae,
             HttpSession session) {
 
-        if (onkoIstuntoVoimassa(session)==false) {
-           return "redirect:login";               
-        }else{
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "redirect:login";
+        } else {
             String sana = "Aakkosissa drinkkejä:";
             HashMap<String, String> osoitteita = new HashMap<String, String>();
 
@@ -230,15 +257,15 @@ public class DrinkkiController {
             return "redirect:haku";
         }
     }
-       
-        @RequestMapping(value = "hae-tyyppi", method = RequestMethod.POST)
+
+    @RequestMapping(value = "hae-tyyppi", method = RequestMethod.POST)
     public String haeTyyppi(
             @RequestParam(value = "hae-tyyppi", required = false) String hae,
             HttpSession session) {
 
-        if (onkoIstuntoVoimassa(session)==false) {
-           return "redirect:login";               
-        }else{
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "redirect:login";
+        } else {
             String sana = "Tyypin mukaan tulleita tuloksia:";
             HashMap<String, String> osoitteita = new HashMap<String, String>();
 
@@ -253,13 +280,14 @@ public class DrinkkiController {
             return "redirect:haku";
         }
     }
-         @RequestMapping(value = "admin", method = RequestMethod.GET)
+
+    @RequestMapping(value = "admin", method = RequestMethod.GET)
     public String adminView(ModelMap model, HttpSession session) {
-             if (onkoIstuntoVoimassa(session)==false) {
-           return "login";               
-        }else{
-        return "admin";
-             }
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "login";
+        } else {
+            return "admin";
+        }
 
     }
 
@@ -268,9 +296,9 @@ public class DrinkkiController {
             @RequestParam(value = "hae-admin", required = false) String hae,
             HttpSession session) {
 
-       if (onkoIstuntoVoimassa(session)==false) {
-           return "redirect:login";               
-        }else{
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "redirect:login";
+        } else {
             String sana = "Haun tulokset:";
             HashMap<String, String> osoitteita = new HashMap<String, String>();
 
@@ -291,9 +319,9 @@ public class DrinkkiController {
             @RequestParam(value = "hae-ehdotuksia-admin", required = false) String hae,
             HttpSession session) {
 
-        if (onkoIstuntoVoimassa(session)==false) {
-           return "redirect:login";               
-        }else{
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "redirect:login";
+        } else {
             String sana = "Ehdotuksia:";
             HashMap<String, String> ehdotuksia = new HashMap<String, String>();
 
@@ -314,9 +342,9 @@ public class DrinkkiController {
             @RequestParam(value = "hae-tyyppi-admin", required = false) String hae,
             HttpSession session) {
 
-        if (onkoIstuntoVoimassa(session)==false) {
-           return "redirect:login";               
-        }else{
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "redirect:login";
+        } else {
             String sana = "Tyypin mukaan tulleita tuloksia:";
             HashMap<String, String> osoitteita = new HashMap<String, String>();
 
@@ -337,9 +365,9 @@ public class DrinkkiController {
             @RequestParam(value = "hae-aakkoset-admin", required = false) String hae,
             HttpSession session) {
 
-        if (onkoIstuntoVoimassa(session)==false) {
-           return "redirect:login";               
-        }else{
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "redirect:login";
+        } else {
             String sana = "Aakkosissa drinkkejä:";
             HashMap<String, String> osoitteita = new HashMap<String, String>();
 
@@ -360,10 +388,10 @@ public class DrinkkiController {
             @RequestParam(value = "luo-drinkki", required = false) String hae,
             HttpSession session) {
 
-        if (onkoIstuntoVoimassa(session)==false) {
-           return "redirect:login";               
-        }else{
-   
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "redirect:login";
+        } else {
+
 
             return "redirect:admin";
         }
@@ -376,9 +404,9 @@ public class DrinkkiController {
             @RequestParam(value = "hae-kayttaja", required = false) String hae,
             HttpSession session) {
 
-        if (onkoIstuntoVoimassa(session)==false) {
-           return "redirect:login";               
-        }else{
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "redirect:login";
+        } else {
             String sana = "Käyttäjiä:";
             HashMap<String, String> kayttajia = new HashMap<String, String>();
 
@@ -396,9 +424,9 @@ public class DrinkkiController {
 
     @RequestMapping(method = RequestMethod.GET, value = "{ehdotusName}/ehdotus")
     public String readEhdotus(Model model, @PathVariable String ehdotusName, HttpSession session) {
-        if (onkoIstuntoVoimassa(session)==false) {
-           return "login";               
-        }else{
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "login";
+        } else {
             String sana = "Ainesosat:";
             ArrayList<String> ainesosa = new ArrayList<String>();
             ainesosa.add("4 cl Vodka_ehdotus");
@@ -408,12 +436,12 @@ public class DrinkkiController {
             return "ehdotus";
         }
     }
-    
+
     @RequestMapping(method = RequestMethod.GET, value = "{kayttajaName}/kayttaja")
     public String readKayttaja(Model model, @PathVariable String kayttajaName, HttpSession session) {
-        if (onkoIstuntoVoimassa(session)==false) {
-           return "login";               
-        }else{
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "login";
+        } else {
             String sana = "Käyttäjän tiedot:";
             ArrayList<String> kayttajat = new ArrayList<String>();
             kayttajat.add("Pekka");
