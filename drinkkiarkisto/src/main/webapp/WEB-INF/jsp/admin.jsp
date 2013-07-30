@@ -20,16 +20,19 @@
 
         <a href="<c:out value="${logout}"/>">logout</a>
 
+        
+        <c:url var="luoDrinkki" value="http://localhost:8080/drinkkiarkisto/app/luo-drinkki">   
+        </c:url>
+
+        <a href="<c:out value="${luoDrinkki}"/>">Luo Drinkki</a>
+           
 
         <form method="POST" action="http://localhost:8080/drinkkiarkisto/app/hae-admin">
             <label>Hae drinkkej‰: <input type="text" name="hae-admin" id="hae-admin" /></label>
             <input type="submit" value ="Hae drinkkej‰"/>
         </form>
 
-        <form method="POST" action="http://localhost:8080/drinkkiarkisto/app/hae-ehdotuksia-admin">
-            <label>Hae ehdotuksia: <input type="text" name="hae-ehdotuksia" id="hae-ehdotuksia" /></label>
-            <input type="submit" value ="Hae ehdotuksia"/>
-        </form>
+    
         <form method="POST" action="http://localhost:8080/drinkkiarkisto/app/hae-tyyppi-admin">
             <label>Hae tyypill‰: <input type="text" name="hae-tyyppi" id="hae-tyyppi" /></label>
             <input type="submit" value ="Hae tyypill‰"/>
@@ -41,48 +44,45 @@
         </form>
 
       
+ <p>Drinkkej‰ haun tuloksella (muutettavaksi):</P>
 
-
-        <p>${sana}</P>
+      
 
         <pre>
             <c:forEach var="alkio" items="${osoitteita}">
     <a href="${alkio.value}">${alkio.key}</a>
             </c:forEach>
         </pre>
-
+        
+        
+            <form method="POST" action="http://localhost:8080/drinkkiarkisto/app/hae-ehdotuksia-admin">
+            <label>Hae ehdotuksia: <input type="text" name="hae-ehdotuksia" id="hae-ehdotuksia" /></label>
+            <input type="submit" value ="Hae ehdotuksia"/>
+        </form>
+  <p>Ehdotuksia hyv‰ksytt‰v‰ksi:</P>
         <pre>
             <c:forEach var="ehdotus" items="${ehdotuksia}">
     <a href="${ehdotus.value}">${ehdotus.key}</a>
             </c:forEach>
         </pre>
 
-        <form method="POST" action="http://localhost:8080/drinkkiarkisto/app/luo-drinkki">
-            <label>Drinkkisi nimi (pakollinen): <input type="text" name="name" id="name" /></label>
-            <label>Drinkkisi tyyppi (cocktail, alkujuoma...): <input type="text" name="tyyppi" id="tyyppi" /></label>
-            <label>P‰‰ainesosa (pakollinen):<input type="text" name="ainesosa1" id ="ainesosa1"/></label>
-            <label>m‰‰r‰: <input type="text" name="maara1" id ="maara1"/></label>
-            <label>Ainesosa 2:<input type="text" name="ainesosa2" id ="ainesosa2"/></label>
-            <label>m‰‰r‰: <input type="text" name="maara2" id ="maara2"/></label>
-            <label>Ainesosa 3:<input type="text" name="ainesosa3" id ="ainesosa3"/></label>
-            <label>m‰‰r‰: <input type="text" name="maara3" id ="maara3"/></label>
-            <label>Ainesosa 4:<input type="text" name="ainesosa4" id ="ainesosa4"/></label>
-            <label>m‰‰r‰: <input type="text" name="maara4" id ="maara4"/></label>
-            <label>Ainesosa 5:<input type="text" name="ainesosa5" id ="ainesosa5"/></label>
-            <label>m‰‰r‰: <input type="text" name="maara5" id ="maara5"/></label>
-            <input type="submit" value ="Luo drinkki" />
-        </form>
+        
 
         <form method="POST" action="http://localhost:8080/drinkkiarkisto/app/hae-kayttaja">
-            <label>Hae k‰ytt‰j‰ </label>
-            <input type="submit" value ="Hae k‰ytt‰j‰"/>
+            <label>Hae kaikki k‰ytt‰j‰t: </label>
+            <input type="submit" value ="Hae"/>
         </form>  
-
+        
+  <p>K‰ytt‰j‰t:</P>
 <pre>
             <c:forEach var="kayttaja" items="${kayttajia}">
     <a href="${kayttaja.value}">${kayttaja.key}</a>
             </c:forEach>
         </pre>
+  
+    <c:url var="takaisin" value="http://localhost:8080/drinkkiarkisto/app/haku">   
+        </c:url>
+        <a href="<c:out value="${takaisin}"/>"><-takaisin hakusivulle</a>
 
     </body>
 </html>

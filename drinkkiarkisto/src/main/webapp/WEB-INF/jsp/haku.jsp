@@ -37,12 +37,16 @@
             <label>Hae drinkkejä: <input type="text" name="hae" id="hae" /></label>
             <input type="submit" value ="Hae"/>
         </form>
+ <form method="POST" action="http://localhost:8080/drinkkiarkisto/app/hae-tyyppi">
+            <label>Hae tyypillä: <input type="text" name="hae-tyyppi" id="hae-tyyppi" /></label>
+            <input type="submit" value ="Hae tyypillä"/>
+        </form>
+        
+              <form method="POST" action="http://localhost:8080/drinkkiarkisto/app/hae-aakkoset">
+            <label>Hae aakkosjärjestyksessä: </label>
+            <input type="submit" value ="Hae aakkosilla"/>
+        </form>
 
-         <pre>
-            <c:forEach var="alkio" items="${yllapitolinkki}">
-    <a href="${alkio.value}">${alkio.key}</a>
-            </c:forEach>
-        </pre>
 
 
         <p>${sana}</P>
@@ -52,15 +56,16 @@
     <a href="${alkio.value}">${alkio.key}</a>
             </c:forEach>
         </pre>
-        <form method="POST" action="http://localhost:8080/drinkkiarkisto/app/hae-tyyppi">
-            <label>Hae tyypillä: <input type="text" name="hae-tyyppi" id="hae-tyyppi" /></label>
-            <input type="submit" value ="Hae tyypillä"/>
-        </form>
-        
-              <form method="POST" action="http://localhost:8080/drinkkiarkisto/app/hae-aakkoset">
-            <label>Hae aakkosjärjestyksessä: </label>
-            <input type="submit" value ="Hae aakkosilla"/>
-        </form>
+                <pre>
+            <c:forEach var="alkio" items="${yllapitolinkki}">
+    <a href="${alkio.value}">${alkio.key}</a>
+            </c:forEach>
+        </pre>
+                 <pre>
+            <c:forEach var="alkio" items="${luoDrinkki}">
+    <a href="${alkio.value}">${alkio.key}</a>
+            </c:forEach>
+        </pre>
         
 
     </body>

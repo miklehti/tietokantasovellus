@@ -28,8 +28,10 @@
         </c:url>
         <a href="<c:out value="${takaisin}"/>"><-takaisin hakusivulle</a>
         
-        <c:url var="takaisin" value="http://localhost:8080/drinkkiarkisto/app/admin">   
-        </c:url>
-        <a href="<c:out value="${takaisin}"/>"><-takaisin adminsivulle</a>
+     <pre>
+            <c:forEach var="alkio" items="${admin}">
+    <a href="${alkio.value}">${alkio.key}</a>
+            </c:forEach>
+        </pre>
     </body>
 </html>

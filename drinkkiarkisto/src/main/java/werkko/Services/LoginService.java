@@ -12,12 +12,21 @@ import werkko.data.UserLogin;
  * @author lehtimik
  */
 public interface LoginService<T> {
-           T create(T object);
+
+    T create(T object);
+
     T read(String id);
+
     T update(T object);
+
     void delete(String id);
-      List<String> list();
-       String loginOK(String username, String password);
-       UserLogin getUserlogin() ;
-       void setUserlogin(UserLogin userlogin);
+
+    List<String> list();
+
+    String loginOK(String username, String password);
+
+    UserLogin getUserlogin();
+
+    void setUserlogin(UserLogin userlogin);
+      UserLogin annaUserLogin(String username);
 }

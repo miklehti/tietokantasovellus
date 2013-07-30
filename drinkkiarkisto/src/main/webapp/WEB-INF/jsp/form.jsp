@@ -17,11 +17,16 @@
     </head>
     <body>
         <h1>Rekisteröidy käyttäjäksi</h1>
+         <br>
         <form method="POST" action="http://localhost:8080/drinkkiarkisto/app/rekisteroidy">
-            <label>Anna haluamasi käyttäjätunnus(5-15 merkkiä): <input type="text" name="name" id="name" value="${name}" /></label>
-            <label>Anna salasanasi(5-15 merkkiä): <input type="password" name="password" id ="password"/></label>
-            <label>Anna salasanasi uudestaan: <input type="password" name="password2" id ="password2"/></label>
-            <label>Anna sähköpostisi (pakollinen): <input type="email" name="email" id ="email" value="${email}"/></label>
+            <label>Anna haluamasi käyttäjätunnus(5-15 merkkiä): <input type="text" name="name" id="name" value="${name}" /></label> <br>
+             <br>
+            <label>Anna salasanasi(5-15 merkkiä): <input type="password" name="password" id ="password"/></label> <br>
+             <br>
+            <label>Anna salasanasi uudestaan: <input type="password" name="password2" id ="password2"/></label> <br>
+             <br>
+            <label>Anna sähköpostisi (pakollinen): <input type="email" name="email" id ="email" value="${email}"/></label> <br>
+             <br>
             <input type="submit" value ="Rekisteröidy" />
         </form>
 

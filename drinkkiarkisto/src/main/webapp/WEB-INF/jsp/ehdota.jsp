@@ -14,18 +14,23 @@
     <body>
         <h1>Ehdota drinkki‰</h1>
         <form method="POST" action="http://localhost:8080/drinkkiarkisto/app/ehdota-drinkkia">
-            <label>Drinkkisi nimi (pakollinen): <input type="text" name="name" id="name" /></label>
-             <label>Drinkkisi tyyppi (cocktail, alkujuoma...): <input type="text" name="tyyppi" id="tyyppi" /></label>
-            <label>P‰‰ainesosa (pakollinen):<input type="text" name="ainesosa1" id ="ainesosa1"/></label>
-            <label>m‰‰r‰: <input type="text" name="maara1" id ="maara1"/></label>
-            <label>Ainesosa 2:<input type="text" name="ainesosa2" id ="ainesosa2"/></label>
-            <label>m‰‰r‰: <input type="text" name="maara2" id ="maara2"/></label>
-             <label>Ainesosa 3:<input type="text" name="ainesosa3" id ="ainesosa3"/></label>
-            <label>m‰‰r‰: <input type="text" name="maara3" id ="maara3"/></label>
-             <label>Ainesosa 4:<input type="text" name="ainesosa4" id ="ainesosa4"/></label>
-            <label>m‰‰r‰: <input type="text" name="maara4" id ="maara4"/></label>
-             <label>Ainesosa 5:<input type="text" name="ainesosa5" id ="ainesosa5"/></label>
-            <label>m‰‰r‰: <input type="text" name="maara5" id ="maara5"/></label>
+            <label>Drinkkisi nimi (pakollinen): <input type="text" name="name" id="name" /></label> <br>
+             <br>
+            <label>P‰‰ainesosa (pakollinen):<input type="text" name="ainesosa1" id ="ainesosa1"/></label> <br>
+            <label>m‰‰r‰: <input type="text" name="maara1" id ="maara1"/></label> <br>
+             <br>
+            <label>Ainesosa 2:<input type="text" name="ainesosa2" id ="ainesosa2"/></label> <br>
+            <label>m‰‰r‰: <input type="text" name="maara2" id ="maara2"/></label> <br>
+             <br>
+             <label>Ainesosa 3:<input type="text" name="ainesosa3" id ="ainesosa3"/></label> <br>
+            <label>m‰‰r‰: <input type="text" name="maara3" id ="maara3"/></label> <br>
+             <br>
+             <label>Ainesosa 4:<input type="text" name="ainesosa4" id ="ainesosa4"/></label> <br>
+            <label>m‰‰r‰: <input type="text" name="maara4" id ="maara4"/></label> <br>
+             <br>
+             <label>Ainesosa 5:<input type="text" name="ainesosa5" id ="ainesosa5"/></label> <br>
+            <label>m‰‰r‰: <input type="text" name="maara5" id ="maara5"/></label> <br>
+             <br>
             <input type="submit" value ="Ehdota drinkki‰" />
         </form>
     </body>

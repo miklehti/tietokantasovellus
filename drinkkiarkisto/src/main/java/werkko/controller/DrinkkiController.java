@@ -37,12 +37,12 @@ public class DrinkkiController {
 
     @PostConstruct
     private void init() {
-//        UserLogin userlogin = new UserLogin();
-//        userlogin.setAuthority("admin");
-//        userlogin.setName("mikko");
-//        userlogin.setPassword("secret");
-//        userlogin.setEmail("mikko@mikko");
-//        loginservice.create(userlogin);
+        UserLogin userlogin = new UserLogin();
+        userlogin.setAuthority("admin");
+        userlogin.setName("mikko");
+        userlogin.setPassword("secret");
+        userlogin.setEmail("mikko@mikko");
+        loginservice.create(userlogin);
 //
 //        UserLogin userlogin2 = new UserLogin();
 //        userlogin2.setAuthority("user");
@@ -111,13 +111,20 @@ public class DrinkkiController {
                 model.addAttribute("yllapitolinkki", yllapitolinkki);
 
             }
+            if (loginservice.getUserlogin().getAuthority().equals("admin")||loginservice.getUserlogin().getAuthority().equals("superuser")) {
+            
+                HashMap<String, String> luoDrinkki = new HashMap<String, String>();
+                luoDrinkki.put("Luo Drinkki", "http://localhost:8080/drinkkiarkisto/app/luo-drinkki");
+                model.addAttribute("luoDrinkki", luoDrinkki);
+
+            }
             String username = (String) session.getAttribute("username");
             String usernameKanta = loginservice.getUserlogin().getName();
             String passwordKanta = loginservice.getUserlogin().getPassword();
             String authorityKanta = loginservice.getUserlogin().getAuthority();
             String idKanta = loginservice.getUserlogin().getId();
             String statusKanta = loginservice.getUserlogin().getStatus();
-                 String emailKanta = loginservice.getUserlogin().getEmail();
+            String emailKanta = loginservice.getUserlogin().getEmail();
             model.addAttribute("username_sessio", username);
             model.addAttribute("usernameKanta", usernameKanta);
             model.addAttribute("authorityKanta", authorityKanta);
@@ -160,6 +167,12 @@ public class DrinkkiController {
         if (onkoIstuntoVoimassa(session) == false) {
             return "login";
         } else {
+            if (loginservice.getUserlogin().getAuthority().equals("admin")) {
+                HashMap<String, String> admin = new HashMap<String, String>();
+                admin.put("<-takaisin admin sivulle", "http://localhost:8080/drinkkiarkisto/app/admin");
+                model.addAttribute("admin", admin);
+
+            }
             String sana = "Ainesosat:";
             ArrayList<String> ainesosa = new ArrayList<String>();
             ainesosa.add("4 cl Gin");
@@ -170,7 +183,6 @@ public class DrinkkiController {
         }
     }
 
-    
     @RequestMapping(value = "rekisteroidy", method = RequestMethod.GET)
     public String viewRekisteroidy(@ModelAttribute("userlogin") UserLogin userlogin) {
         return "form";
@@ -187,19 +199,19 @@ public class DrinkkiController {
 
     @RequestMapping(value = "rekisteroidy", method = RequestMethod.POST)
     public String lisaaKayttajia(
-            @Valid @ModelAttribute UserLogin userlogin,  
-            BindingResult bindingResult,       
+            @Valid @ModelAttribute UserLogin userlogin,
+            BindingResult bindingResult,
             @RequestParam(value = "password2", required = true) String password2,
             HttpSession session, Model model) {
-        
-            if(bindingResult.hasErrors()) {
-                List<ObjectError> errors =   bindingResult.getAllErrors();
-                ObjectError objecterror = errors.get(0);
-                String nameError = objecterror.getDefaultMessage();
-                session.setAttribute("name", userlogin.getName());
-                 session.setAttribute("email", userlogin.getEmail());
-                session.setAttribute("nameError", nameError);
-                
+
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> errors = bindingResult.getAllErrors();
+            ObjectError objecterror = errors.get(0);
+            String nameError = objecterror.getDefaultMessage();
+            session.setAttribute("name", userlogin.getName());
+            session.setAttribute("email", userlogin.getEmail());
+            session.setAttribute("nameError", nameError);
+
             return "form";
         }
 
@@ -208,11 +220,11 @@ public class DrinkkiController {
             session.setAttribute("nameError", nameError);
             return "form";
         }
-       
+
         userlogin.setAuthority("user");
-        
+
         UserLogin uusiKayttaja = (UserLogin) loginservice.create(userlogin);
-        
+
         if (uusiKayttaja.getStatus().equals("ok")) {
             session.setAttribute("username", userlogin.getName());
             session.setAttribute("password", userlogin.getPassword());
@@ -301,6 +313,7 @@ public class DrinkkiController {
         if (onkoIstuntoVoimassa(session) == false) {
             return "login";
         } else {
+            session.removeAttribute("nameError");
             return "admin";
         }
 
@@ -424,17 +437,74 @@ public class DrinkkiController {
         } else {
             String sana = "Käyttäjiä:";
             HashMap<String, String> kayttajia = new HashMap<String, String>();
+            List<String> users = loginservice.list();
 
+            for (int i = 0; i < users.size(); i++) {
+                String key = users.get(i);
+                String value = "http://localhost:8080/drinkkiarkisto/app/" + key + "/kayttaja";
+                kayttajia.put(key, value);
 
-            kayttajia.put("Pekka", "http://localhost:8080/drinkkiarkisto/app/Pekka/kayttaja");
-            kayttajia.put("Mikko", "http://localhost:8080/drinkkiarkisto/app/Mikko/kayttaja");
-
+            }
 
             session.setAttribute("sana", sana);
 
             session.setAttribute("kayttajia", kayttajia);
             return "redirect:admin";
         }
+    }
+
+    @RequestMapping(value = "poista-kayttaja", method = RequestMethod.POST)
+    public String poistaKayttaja(
+            @RequestParam(value = "poista-kayttaja", required = false) String hae,
+            HttpSession session, UserLogin userlogin, Model model) {
+
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "redirect:login";
+        }
+        UserLogin username = (UserLogin) session.getAttribute("userlogin");
+        if (username.getAuthority().equals("admin")) {
+
+            session.setAttribute("nameError", "admin käyttäjää ei voi poistaa");
+            session.setAttribute("usernameKanta", username.getName());
+            session.setAttribute("authorityKanta", username.getAuthority());
+            session.setAttribute("idKanta", username.getId());
+            session.setAttribute("statusKanta", username.getStatus());
+            session.setAttribute("passwordKanta", username.getPassword());
+            session.setAttribute("emailKanta", username.getEmail());
+            return "kayttaja";
+        }
+        loginservice.delete(username.getId());
+        session.removeAttribute("kayttajia");
+        return "redirect:admin";
+
+    }
+
+    @RequestMapping(value = "ylenna-kayttaja", method = RequestMethod.POST)
+    public String ylennaKayttaja(
+            @RequestParam(value = "ylenna-kayttaja", required = false) String hae,
+            HttpSession session, UserLogin userlogin, Model model) {
+
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "redirect:login";
+        }
+        UserLogin username = (UserLogin) session.getAttribute("userlogin");
+        if (username.getAuthority().equals("admin") || username.getAuthority().equals("superuser")) {
+
+            session.setAttribute("nameError", "vain user käyttäjän voi ylentää super useriksi");
+            session.setAttribute("authorityKanta", username.getAuthority());
+            session.setAttribute("usernameKanta", username.getName());
+            session.setAttribute("idKanta", username.getId());
+            session.setAttribute("statusKanta", username.getStatus());
+            session.setAttribute("passwordKanta", username.getPassword());
+            session.setAttribute("emailKanta", username.getEmail());
+            return "kayttaja";
+        }
+
+        username.setAuthority("superuser");
+        loginservice.update(username);
+        session.removeAttribute("kayttajia");
+        return "redirect:admin";
+
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "{ehdotusName}/ehdotus")
@@ -457,13 +527,32 @@ public class DrinkkiController {
         if (onkoIstuntoVoimassa(session) == false) {
             return "login";
         } else {
-            String sana = "Käyttäjän tiedot:";
-            ArrayList<String> kayttajat = new ArrayList<String>();
-            kayttajat.add("Pekka");
-            kayttajat.add("salasana");
-            model.addAttribute("sana", sana);
-            model.addAttribute("kayttajat", kayttajat);
+            UserLogin userlogin = loginservice.annaUserLogin(kayttajaName);
+            session.setAttribute("userlogin", userlogin);
+            model.addAttribute("usernameKanta", userlogin.getName());
+            model.addAttribute("authorityKanta", userlogin.getAuthority());
+            model.addAttribute("idKanta", userlogin.getId());
+            model.addAttribute("statusKanta", userlogin.getStatus());
+            model.addAttribute("passwordKanta", userlogin.getPassword());
+            model.addAttribute("emailKanta", userlogin.getEmail());
             return "kayttaja";
         }
+    }
+    
+        @RequestMapping(value = "luo-drinkki", method = RequestMethod.GET)
+    public String luoDrinkki(ModelMap model, HttpSession session) {
+        if (onkoIstuntoVoimassa(session) == false) {
+            return "login";
+        } else {
+             if (loginservice.getUserlogin().getAuthority().equals("admin")) {
+                HashMap<String, String> admin = new HashMap<String, String>();
+                admin.put("<-takaisin admin sivulle", "http://localhost:8080/drinkkiarkisto/app/admin");
+                model.addAttribute("admin", admin);
+
+            }
+            session.removeAttribute("nameError");
+            return "luoDrinkki";
+        }
+
     }
 }
