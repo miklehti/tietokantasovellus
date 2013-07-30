@@ -6,12 +6,17 @@ package werkko.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,19 +37,19 @@ public class DrinkkiController {
 
     @PostConstruct
     private void init() {
-        UserLogin userlogin = new UserLogin();
-        userlogin.setAuthority("admin");
-        userlogin.setName("mikko");
-        userlogin.setPassword("secret");
-        userlogin.setEmail("mikko@mikko");
-        loginservice.create(userlogin);
-
-        UserLogin userlogin2 = new UserLogin();
-        userlogin2.setAuthority("user");
-        userlogin2.setName("pekka");
-        userlogin2.setPassword("secret");
-        userlogin.setEmail("pekka@pekka");
-        loginservice.create(userlogin2);
+//        UserLogin userlogin = new UserLogin();
+//        userlogin.setAuthority("admin");
+//        userlogin.setName("mikko");
+//        userlogin.setPassword("secret");
+//        userlogin.setEmail("mikko@mikko");
+//        loginservice.create(userlogin);
+//
+//        UserLogin userlogin2 = new UserLogin();
+//        userlogin2.setAuthority("user");
+//        userlogin2.setName("pekka");
+//        userlogin2.setPassword("secret");
+//        userlogin.setEmail("pekka@pekka");
+//        loginservice.create(userlogin2);
     }
 
     public boolean onkoIstuntoVoimassa(HttpSession session) {
@@ -165,9 +170,10 @@ public class DrinkkiController {
         }
     }
 
-    @RequestMapping("rekisteroidy")
-    public String viewRekisteroidy() {
-        return "rekisteroidy";
+    
+    @RequestMapping(value = "rekisteroidy", method = RequestMethod.GET)
+    public String viewRekisteroidy(@ModelAttribute("userlogin") UserLogin userlogin) {
+        return "form";
     }
 
     @RequestMapping("ehdota")
@@ -179,33 +185,42 @@ public class DrinkkiController {
         }
     }
 
-    @RequestMapping(value = "add-user", method = RequestMethod.POST)
+    @RequestMapping(value = "rekisteroidy", method = RequestMethod.POST)
     public String lisaaKayttajia(
-            @RequestParam(value = "username", required = true) String username,
-            @RequestParam(value = "password", required = true) String password,
-            @RequestParam(value = "email", required = true) String email,
+            @Valid @ModelAttribute UserLogin userlogin,  
+            BindingResult bindingResult,       
             @RequestParam(value = "password2", required = true) String password2,
-            HttpSession session) {
+            HttpSession session, Model model) {
+        
+            if(bindingResult.hasErrors()) {
+                List<ObjectError> errors =   bindingResult.getAllErrors();
+                ObjectError objecterror = errors.get(0);
+                String nameError = objecterror.getDefaultMessage();
+                session.setAttribute("name", userlogin.getName());
+                 session.setAttribute("email", userlogin.getEmail());
+                session.setAttribute("nameError", nameError);
+                
+            return "form";
+        }
 
-        if (!password.equals(password2)) {
+        if (!userlogin.getPassword().equals(password2)) {
             String nameError = "Antamasi salasanat eivät ole samoja";
             session.setAttribute("nameError", nameError);
-            return "redirect:add-user";
+            return "form";
         }
-        UserLogin userlogin = new UserLogin();
+       
         userlogin.setAuthority("user");
-        userlogin.setName(username);
-        userlogin.setPassword(password);
-        userlogin.setEmail(email);
+        
         UserLogin uusiKayttaja = (UserLogin) loginservice.create(userlogin);
+        
         if (uusiKayttaja.getStatus().equals("ok")) {
-            session.setAttribute("username", username);
-            session.setAttribute("password", password);
+            session.setAttribute("username", userlogin.getName());
+            session.setAttribute("password", userlogin.getPassword());
             loginservice.setUserlogin(uusiKayttaja);
             return "redirect:haku";
         } else {
             session.setAttribute("nameError", uusiKayttaja.getStatus());
-            return "redirect:add-user";
+            return "form";
         }
 
 

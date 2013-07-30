@@ -11,6 +11,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  *
@@ -23,13 +26,22 @@ public class UserLogin implements Login, Serializable {
     @Id
     @Column(name = "id")
     private String id;
+    
     @Column(name = "name")
+    @NotBlank
+    @Length(min = 5, max = 15)
     private String name;
+    
     @Column(name = "password")
+    @NotBlank
+    @Length(min = 5, max = 15)
     private String password;
+    
     @Column(name = "authority")
     private String authority;
     
+    @NotBlank
+    @Email
        @Column(name = "email")
     private String email;
     
