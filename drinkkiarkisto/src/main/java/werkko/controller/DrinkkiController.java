@@ -28,9 +28,11 @@ import werkko.Services.DrinkkiAinesosaServiceRajapinta;
 
 import werkko.Services.DrinkkiServiceRajapinta;
 import werkko.Services.LoginService;
+import werkko.Services.TyyppiServiceRajapinta;
 import werkko.data.Ainesosa;
 import werkko.data.Drinkki;
 import werkko.data.DrinkkiAinesosa;
+import werkko.data.Tyyppi;
 
 import werkko.data.UserLogin;
 
@@ -49,6 +51,8 @@ public class DrinkkiController {
     private DrinkkiServiceRajapinta drinkkiservice;
     @Autowired
     private DrinkkiAinesosaServiceRajapinta drinkkiainesosaservice;
+     @Autowired
+    private TyyppiServiceRajapinta tyyppiservice;
 
     @PostConstruct
     private void init() {
@@ -79,7 +83,13 @@ public class DrinkkiController {
         drinkkiainesosat.add(drinkkiainesosa);
         drinkkiainesosat.add(drinkkiainesosa2);
         
+        Tyyppi uusiTyyppi = new Tyyppi();
+        uusiTyyppi.setTyyppi_name("cocktaili");
+        ArrayList<Tyyppi> tyyppi = new  ArrayList<Tyyppi>();
+        tyyppi.add(uusiTyyppi);
+        
         Drinkki gt = new Drinkki();
+        gt.setTyypit(tyyppi);
         gt.setDrinkki_name("Gin Tonic");
         gt.setDrinkkiAinesosa(drinkkiainesosat);
         
@@ -611,8 +621,52 @@ public class DrinkkiController {
       }
       session.setAttribute("drinkki_id", drinkki_id);
       session.setAttribute("drinkki_name", drinkki_name);
-//      model.addAttribute("drinkki_id", drinkki_id);
-//      model.addAttribute("drinkki_name", drinkki_name);
+      
+         HashMap<String, Integer> drinkkiAinesosa = new HashMap<String, Integer>();
+      for(int i = 0; i<drinkit.size();i++){
+          
+           List<DrinkkiAinesosa> drinkkiainesosat = drinkit.get(i).getDrinkkiAinesosa();
+          for(int j = 0; j<drinkkiainesosat.size();j++){
+              drinkkiAinesosa.put("drinkkiAinesosa" + j, drinkkiainesosat.get(j).getMaara());
+          }
+          
+      }
+      session.setAttribute("drinkkiAinesosa", drinkkiAinesosa);
+      //***********************************
+       List<DrinkkiAinesosa> drinkkiainesosa =  drinkkiainesosaservice.list();
+       HashMap<String, Integer> drinkkiAinesosa_maara = new HashMap<String, Integer>();
+       for(int i = 0; i<drinkkiainesosa.size();i++){
+           drinkkiAinesosa_maara.put("drinkkiAinesosa" + i, drinkkiainesosa.get(i).getMaara());
+       }
+      session.setAttribute("drinkkiAinesosa_maara", drinkkiAinesosa_maara);
+      //***********************************
+      List<Ainesosa> aineet = ainesosaservice.list();
+      
+       HashMap<String, String> ainesosa_id = new HashMap<String, String>();
+       for(int i = 0; i<aineet.size();i++){
+           ainesosa_id.put("ainesosa_id" + i, aineet.get(i).getAinesosa_id());
+       }
+      session.setAttribute("ainesosa_id", ainesosa_id);
+      
+      HashMap<String, String> ainesosa_name = new HashMap<String, String>();
+       for(int i = 0; i<aineet.size();i++){
+           ainesosa_name.put("ainesosa_name" + i, aineet.get(i).getAinesosa_name());
+       }
+      session.setAttribute("ainesosa_name", ainesosa_name);
+      //***********************************
+      
+       List<Tyyppi> tyyppi = tyyppiservice.list();
+       HashMap<String, String> tyyppi_id = new HashMap<String, String>();
+       for(int i = 0; i<tyyppi.size();i++){
+           tyyppi_id.put("tyyppi_id" + i, tyyppi.get(i).getTyyppi_id());
+       }
+        session.setAttribute("tyyppi_id", tyyppi_id);
+        
+        HashMap<String, String> tyyppi_name = new HashMap<String, String>();
+       for(int i = 0; i<tyyppi.size();i++){
+           tyyppi_name.put("tyyppi_name" + i, tyyppi.get(i).getTyyppi_name());
+       }
+        session.setAttribute("tyyppi_name", tyyppi_name);
         return "tulostus";
 
     }

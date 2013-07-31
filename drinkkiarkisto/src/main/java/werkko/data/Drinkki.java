@@ -40,6 +40,12 @@ public class Drinkki implements DrinkkiRajapinta, Serializable {
     
      @OneToMany(mappedBy = "drinkki")
     private List<DrinkkiAinesosa> drinkkiAinesosa = new ArrayList<DrinkkiAinesosa>();
+     
+      @ManyToMany
+   @JoinTable(name="DrinkkiTyypit",  
+              joinColumns=@JoinColumn(name="Drinkki_id"), 
+              inverseJoinColumns=@JoinColumn(name="Tyyppi_id"))
+   private List<Tyyppi> tyypit;
 
     public List<DrinkkiAinesosa> getDrinkkiAinesosa() {
         return drinkkiAinesosa;
@@ -68,6 +74,14 @@ public class Drinkki implements DrinkkiRajapinta, Serializable {
 
     public void setDrinkki_name(String drinkki_name) {
         this.drinkki_name = drinkki_name;
+    }
+
+    public void setTyypit(List<Tyyppi> tyypit) {
+        this.tyypit = tyypit;
+    }
+
+    public List<Tyyppi> getTyypit() {
+        return tyypit;
     }
     
     
