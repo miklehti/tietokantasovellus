@@ -29,6 +29,10 @@
         
         <a href="<c:out value="${thisURL}"/>">logout</a>
         
+        <c:url var="tulostus" value="http://localhost:8080/drinkkiarkisto/app/tulostus">   
+        </c:url>
+        <a href="<c:out value="${tulostus}"/>">tulostus</a>
+        
         <c:url var="ehdota" value="http://localhost:8080/drinkkiarkisto/app/ehdota">   
         </c:url>
         <a href="<c:out value="${ehdota}"/>">Ehdota drinkkiä</a>

@@ -23,6 +23,8 @@
      <context:component-scan base-package="werkko.data" />
      
      <mvc:annotation-driven />
+     
+    
      <!-- Ladataan käyttöön springin view-resolver: luokka, jota käytetään
     näkymätiedostojen päättelyyn -->    
     <!-- Nyt Controller-luokkien metodeissa palautettu merkkijono määrittää

@@ -21,8 +21,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import werkko.Services.AinesosaServiceRajapinta;
+
+import werkko.Services.DrinkkiAinesosaServiceRajapinta;
+
+import werkko.Services.DrinkkiServiceRajapinta;
 import werkko.Services.LoginService;
-import werkko.Services.UserLoginService;
+import werkko.data.Ainesosa;
+import werkko.data.Drinkki;
+import werkko.data.DrinkkiAinesosa;
+
 import werkko.data.UserLogin;
 
 /**
@@ -34,6 +43,12 @@ public class DrinkkiController {
 
     @Autowired
     private LoginService loginservice;
+    @Autowired
+    private AinesosaServiceRajapinta ainesosaservice;
+    @Autowired
+    private DrinkkiServiceRajapinta drinkkiservice;
+    @Autowired
+    private DrinkkiAinesosaServiceRajapinta drinkkiainesosaservice;
 
     @PostConstruct
     private void init() {
@@ -43,6 +58,33 @@ public class DrinkkiController {
         userlogin.setPassword("secret");
         userlogin.setEmail("mikko@mikko");
         loginservice.create(userlogin);
+        
+        Ainesosa gin = new Ainesosa();
+        gin.setAinesosa_name("Gin");
+        
+        Ainesosa tonic = new Ainesosa();
+        tonic.setAinesosa_name("Tonic");
+        
+        
+        DrinkkiAinesosa drinkkiainesosa = new DrinkkiAinesosa();
+        drinkkiainesosa.setMaara(4);
+        drinkkiainesosa.setAinesosa(gin);
+        
+         DrinkkiAinesosa drinkkiainesosa2 = new DrinkkiAinesosa();
+        drinkkiainesosa2.setMaara(2);
+        drinkkiainesosa2.setAinesosa(tonic);
+        
+        ArrayList<DrinkkiAinesosa> drinkkiainesosat = new  ArrayList<DrinkkiAinesosa>();
+        
+        drinkkiainesosat.add(drinkkiainesosa);
+        drinkkiainesosat.add(drinkkiainesosa2);
+        
+        Drinkki gt = new Drinkki();
+        gt.setDrinkki_name("Gin Tonic");
+        gt.setDrinkkiAinesosa(drinkkiainesosat);
+        
+        drinkkiservice.create(gt);
+        
 //
 //        UserLogin userlogin2 = new UserLogin();
 //        userlogin2.setAuthority("user");
@@ -111,8 +153,8 @@ public class DrinkkiController {
                 model.addAttribute("yllapitolinkki", yllapitolinkki);
 
             }
-            if (loginservice.getUserlogin().getAuthority().equals("admin")||loginservice.getUserlogin().getAuthority().equals("superuser")) {
-            
+            if (loginservice.getUserlogin().getAuthority().equals("admin") || loginservice.getUserlogin().getAuthority().equals("superuser")) {
+
                 HashMap<String, String> luoDrinkki = new HashMap<String, String>();
                 luoDrinkki.put("Luo Drinkki", "http://localhost:8080/drinkkiarkisto/app/luo-drinkki");
                 model.addAttribute("luoDrinkki", luoDrinkki);
@@ -538,13 +580,13 @@ public class DrinkkiController {
             return "kayttaja";
         }
     }
-    
-        @RequestMapping(value = "luo-drinkki", method = RequestMethod.GET)
+
+    @RequestMapping(value = "luo-drinkki", method = RequestMethod.GET)
     public String luoDrinkki(ModelMap model, HttpSession session) {
         if (onkoIstuntoVoimassa(session) == false) {
             return "login";
         } else {
-             if (loginservice.getUserlogin().getAuthority().equals("admin")) {
+            if (loginservice.getUserlogin().getAuthority().equals("admin")) {
                 HashMap<String, String> admin = new HashMap<String, String>();
                 admin.put("<-takaisin admin sivulle", "http://localhost:8080/drinkkiarkisto/app/admin");
                 model.addAttribute("admin", admin);
@@ -553,6 +595,25 @@ public class DrinkkiController {
             session.removeAttribute("nameError");
             return "luoDrinkki";
         }
+
+    }
+
+    @RequestMapping(value = "tulostus", method = RequestMethod.GET)
+    public String tulostus(ModelMap model, HttpSession session) {
+       List<Drinkki> drinkit =  drinkkiservice.list();
+      HashMap<String, String> drinkki_id = new HashMap<String, String>();
+      for(int i = 0; i<drinkit.size();i++){
+          drinkki_id.put("drinkki" + i, drinkit.get(i).getDrinkki_id());
+      }
+      HashMap<String, String> drinkki_name = new HashMap<String, String>();
+      for(int i = 0; i<drinkit.size();i++){
+          drinkki_name.put("drinkki_nimi" + i, drinkit.get(i).getDrinkki_name());
+      }
+      session.setAttribute("drinkki_id", drinkki_id);
+      session.setAttribute("drinkki_name", drinkki_name);
+//      model.addAttribute("drinkki_id", drinkki_id);
+//      model.addAttribute("drinkki_name", drinkki_name);
+        return "tulostus";
 
     }
 }
