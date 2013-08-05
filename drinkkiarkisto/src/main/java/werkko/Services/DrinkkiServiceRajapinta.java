@@ -5,6 +5,7 @@
 package werkko.Services;
 
 import java.util.List;
+import werkko.data.Drinkki;
 
 /**
  *
@@ -20,4 +21,5 @@ public interface DrinkkiServiceRajapinta<T> {
     void delete(String id);
 
     List<T> list();
+    String luoUusiDrinkki(Drinkki drinkki);
 }

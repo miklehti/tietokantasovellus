@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="windows-1252"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -33,5 +34,8 @@
              <br>
             <input type="submit" value ="Ehdota drinkkiä" />
         </form>
+        <c:url var="takaisin" value="http://localhost:8080/drinkkiarkisto/app/haku">   
+        </c:url>
+        <a href="<c:out value="${takaisin}"/>"><-takaisin hakusivulle</a>
     </body>
-</html>
+</html> 

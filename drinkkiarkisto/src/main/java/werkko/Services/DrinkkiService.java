@@ -41,4 +41,13 @@ public class DrinkkiService implements DrinkkiServiceRajapinta<Drinkki>{
     public List<Drinkki> list() {
        return drinkkiAinesosaRepositoryRajapinta.list();
     }
+    
+    public String luoUusiDrinkki(Drinkki drinkki){
+        Drinkki loytyyko = read(drinkki.getDrinkki_id());
+        if(loytyyko==null){
+            create(drinkki);
+            return "ok";
+        }
+        return "Antamasi drinkki on jo olemassa!";
+    }
 }
