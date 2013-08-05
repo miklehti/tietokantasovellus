@@ -54,6 +54,7 @@
 
 
         <p>${sana}</P>
+        <p>${eiLoydy}</P>
 
         <pre>
             <c:forEach var="alkio" items="${osoitteita}">

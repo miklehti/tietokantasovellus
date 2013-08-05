@@ -201,12 +201,11 @@ public class DrinkkiController {
         } else {
             String sana = "Haun tulokset:";
             HashMap<String, String> osoitteita = new HashMap<String, String>();
-
-
-            osoitteita.put("Gin Tonic", "http://localhost:8080/drinkkiarkisto/app/GinTonic/drinkki");
-            osoitteita.put("Musta Ryss‰", "http://localhost:8080/drinkkiarkisto/app/MustaRyssa/drinkki");
-
-
+            osoitteita = drinkkiservice.etsiDrinkkeja(hae);
+            if(osoitteita.isEmpty()){
+                String eiLoydy = "haku ei tuottanut yht‰‰n tulosta";
+                session.setAttribute("eiLoydy", eiLoydy);
+            }
             session.setAttribute("sana", sana);
 
             session.setAttribute("osoitteita", osoitteita);

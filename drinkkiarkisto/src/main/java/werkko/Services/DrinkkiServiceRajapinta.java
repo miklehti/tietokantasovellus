@@ -4,6 +4,7 @@
  */
 package werkko.Services;
 
+import java.util.HashMap;
 import java.util.List;
 import werkko.data.Drinkki;
 
@@ -22,4 +23,5 @@ public interface DrinkkiServiceRajapinta<T> {
 
     List<T> list();
     String luoUusiDrinkki(Drinkki drinkki);
+    HashMap<String, String> etsiDrinkkeja(String hakukriteeri);
 }
