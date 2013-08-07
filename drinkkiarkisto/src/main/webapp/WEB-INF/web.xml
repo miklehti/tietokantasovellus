@@ -7,6 +7,26 @@
     http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
     <display-name>jpachat2</display-name>
+    <!-- Tietoturvafiltteri. Huom! Filtterin nimen tulee olla täsmälleen tämä. -->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <!-- Ladataan konteksti ja tietoturvakonfiguraatio -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- kerrotaan tietoturvakonfiguraation sijainti yllä määritellylle kontekstin lataajalle. -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/security.xml</param-value>
+    </context-param>
      <servlet>
         <servlet-name>front-controller</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -15,7 +35,7 @@
     
     <servlet-mapping>
         <servlet-name>front-controller</servlet-name>
-        <url-pattern>/app/*</url-pattern>
+        <url-pattern>app/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -23,7 +43,8 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>/WEB-INF/jsp/login.jsp</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
         </welcome-file-list>
+  
     </web-app>
 

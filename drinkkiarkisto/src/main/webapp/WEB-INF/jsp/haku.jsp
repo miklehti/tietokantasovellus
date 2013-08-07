@@ -29,7 +29,11 @@
             <input type="submit" name ="Hae"/>
         </form>
 
-
+<sec:authorize access="hasRole('admin')">
+    <c:url var="thisURL" value="http://localhost:8080/drinkkiarkisto/app/logout">   
+        </c:url>
+            <a href="${pageContext.request.contextPath}/admin/">Admin pages</a>
+        </sec:authorize>
 
         <p>${sana}</P>
 
