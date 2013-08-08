@@ -10,28 +10,31 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-        <title>JSP Page</title>
+        <title>Ehdotettu drinkki</title>
     </head>
     <body>
-        <h1>Drinkin resepti</h1>
+        <h1>Ehdotetun drinkin resepti</h1>
          <c:url var="logout" value="http://localhost:8080/drinkkiarkisto/app/logout">   
         </c:url>
         <a href="<c:out value="${logout}"/>">logout</a>
          <p>${sana}</P>
+          <p>${tyyppi}</P>
         <pre>
             <c:forEach var="alkio" items="${ainesosa}">
        ${alkio}     
             </c:forEach>
         </pre>
         
-          <c:url var="takaisin" value="http://localhost:8080/drinkkiarkisto/app/haku">   
+          <c:url var="takaisin" value="http://localhost:8080/drinkkiarkisto/app/admin">   
         </c:url>
-        <a href="<c:out value="${takaisin}"/>"><-takaisin hakusivulle</a>
+        <a href="<c:out value="${takaisin}"/>"><-takaisin</a>
         
-     <pre>
-            <c:forEach var="alkio" items="${admin}">
-    <a href="${alkio.value}">${alkio.key}</a>
-            </c:forEach>
-        </pre>
+        <form method="POST" action="http://localhost:8080/drinkkiarkisto/app/admin-hyväksy">
+  <input type="submit" value ="Hyväksy" />
+</form>
+                
+        <form method="POST" action="http://localhost:8080/drinkkiarkisto/app/admin-hylkaa">
+  <input type="submit" value ="Hylkää" />
+</form>
     </body>
 </html>
